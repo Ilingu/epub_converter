@@ -67,22 +67,22 @@ pub fn build_ietclh() -> epub_builder::Result<()> {
 
                 // decrypt jummed text (font ceasar encryption)
                 for jummed_element in document.select(&chapter_jummed_text_selector) {
-                    let jummed_text = jummed_element.text().collect::<String>();
+                    let jummed_text = clean_html(jummed_element.inner_html());
                     let dejummed_text = decrypt_open_sans_jumbld(&jummed_text);
                     chapter_html = chapter_html.replace(&jummed_text, &dejummed_text);
                 }
 
                 // remove ammoying or non supported elems
                 for annoying_elem in document.select(&chapter_annoying_elems_selector) {
-                    chapter_html = chapter_html.replace(&annoying_elem.html(), "");
+                    chapter_html = chapter_html.replace(&clean_html(annoying_elem.html()), "");
                 }
                 for img in document.select(&chapter_image_selector) {
-                    chapter_html = chapter_html.replace(&img.html(), "");
+                    chapter_html = chapter_html.replace(&clean_html(img.html()), "");
                 }
 
                 let xhtml_page = format!(
                     r#"<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html [ <!ENTITY nbsp "&#160;"> ]>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
 <head>
 <title>Chapter {}</title>

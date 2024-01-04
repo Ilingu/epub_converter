@@ -2,6 +2,7 @@ pub fn clean_html(html_content: String) -> String {
     html_content
         .replace("<hr>", "<hr/>")
         .replace("<br>", "<br/>")
+        .replace("&nbsp;", " ")
 }
 
 pub fn decrypt_open_sans_jumbld(jum_str: &str) -> String {
